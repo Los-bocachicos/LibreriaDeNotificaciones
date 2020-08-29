@@ -9,37 +9,46 @@ class NotificationType:
 class MailNotificator(NotificationType):
     
     def send(self, message: str):
-        print("Sending mail: {}. To: ".format(message), self.receivers)
+        print("Enviando Email: {}. To: ".format(message), self.receivers)
 
 
 class SMSNotificator(NotificationType):
     
     def send(self, message: str):
-        print("Sending SMS: {} to: ".format(message), self.receivers)
+        print("Enviando SMS: {} to: ".format(message), self.receivers)
 
 
 class FacebookNotificator(NotificationType):
 
     def send(self, message: str):
-        print("Sending Facebook: {} to: ".format(message), self.receivers)
+        print("Enviando Facebook: {} to: ".format(message), self.receivers)
 
 
 class CompanyNotificator(NotificationType):
 
     def send(self, message: str):
-        print("Sending Company: {} to: ".format(message), self.receivers)
+        print("Enviando Empresarial: {} to: ".format(message), self.receivers)
 
 
 class Notificator:
     def __init__(self, notificators=[]):
         self.notificators = notificators
 
-    def addNotificator(self, notificador: NotificationType):
-        self.notificators.append(notificador)
+    def addNotificator(self, notificator: NotificationType):
+        """
+         Añade un tipo de notificador a la lista
+        """
+        self.notificators.append(notificator)
 
-    def removeNotificator(self, notificador: NotificationType):
-        self.notificators.remove(notificador)
+    def removeNotificator(self, notificator: NotificationType):
+        """
+         Elimina un tipo de notificador de la lista
+        """
+        self.notificators.remove(notificator)
 
     def send(self, message: str):
+        """
+         Envia el mensaje a todos los tipos de notificador de la lista
+        """
         for n in self.notificators:
             n.send(message)
