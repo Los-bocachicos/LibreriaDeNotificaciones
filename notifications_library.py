@@ -1,54 +1,64 @@
-class NotificationType:
-    def __init__(self, receivers=[]):
-        self.receivers = receivers
+class TipoNotificacion:
+    def __init__(self, destinatarios=[]):
+        self.destinatarios = destinatarios
 
-    def send(self, message: str):
+    def send(self, mensaje: str):
         raise NotImplementedError
 
 
-class MailNotificator(NotificationType):
+class NotificadorCorreo(TipoNotificacion):
     
-    def send(self, message: str):
-        print("Enviando Email: {}. To: ".format(message), self.receivers)
+    def send(self, mensaje: str):
+        print("Enviando Email: {}. To: ".format(mensaje), self.destinatarios)
 
 
-class SMSNotificator(NotificationType):
+class NotificadorSMS(TipoNotificacion):
     
-    def send(self, message: str):
-        print("Enviando SMS: {} to: ".format(message), self.receivers)
+    def send(self, mensaje: str):
+        print("Enviando SMS: {} to: ".format(mensaje), self.destinatarios)
 
 
-class FacebookNotificator(NotificationType):
+class NotificadorFacebook(TipoNotificacion):
 
-    def send(self, message: str):
-        print("Enviando Facebook: {} to: ".format(message), self.receivers)
-
-
-class CompanyNotificator(NotificationType):
-
-    def send(self, message: str):
-        print("Enviando Empresarial: {} to: ".format(message), self.receivers)
+    def send(self, mensaje: str):
+        print("Enviando Facebook: {} to: ".format(mensaje), self.destinatarios)
 
 
-class Notificator:
-    def __init__(self, notificators=[]):
-        self.notificators = notificators
+class NotificadorEmpresa(TipoNotificacion):
 
-    def addNotificator(self, notificator: NotificationType):
-        """
-         Añade un tipo de notificador a la lista
-        """
-        self.notificators.append(notificator)
+    def send(self, mensaje: str):
+        print("Enviando Empresarial: {} to: ".format(mensaje), self.destinatarios)
 
-    def removeNotificator(self, notificator: NotificationType):
-        """
-         Elimina un tipo de notificador de la lista
-        """
-        self.notificators.remove(notificator)
 
-    def send(self, message: str):
+class Notificador:
+    """
+    
+     1: Correo,
+     2: Facebook,
+     3: SMS,
+     4: Empresa
+    """
+    def __init__(self, notificadores={}):
+        fabrica = FabricaNotificadores()
+        self.notificadores = fabrica.crearNotificadores(notificadores)
+
+    def send(self, mensaje: str):
         """
          Envia el mensaje a todos los tipos de notificador de la lista
         """
-        for n in self.notificators:
-            n.send(message)
+        for n in self.notificadores:
+            n.send(mensaje)
+
+
+class FabricaNotificadores:
+
+    def __init__(self):
+        self.notificadoresExistentes = [NotificadorCorreo, NotificadorFacebook, NotificadorSMS, NotificadorEmpresa]
+
+    def crearNotificadores(self, notificadores: {}) -> []:
+        notificadoresCreados = []
+        for key in notificadores.keys():
+            destinatarios = notificadores.get(key)
+            notificadorNuevo = self.notificadoresExistentes[key](destinatarios)
+            notificadoresCreados.append(notificadorNuevo)
+        return notificadoresCreados
