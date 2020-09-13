@@ -3,6 +3,7 @@ class TipoNotificacion:
         self.destinatarios = destinatarios
 
     def send(self, mensaje: str):
+        # Esta es una de las formas más sencillas de definir un método abstracto en python
         raise NotImplementedError
 
 
@@ -53,10 +54,12 @@ class Notificador:
 class FabricaNotificadores:
 
     def __init__(self):
+        # Esta lista contiene todos los TiposNotificador existentes
         self.notificadoresExistentes = [NotificadorCorreo, NotificadorFacebook, NotificadorSMS, NotificadorEmpresa]
 
     def crearNotificadores(self, notificadores: {}) -> []:
         notificadoresCreados = []
+        # Se recorren los tipos existentes creando los que sean necesarios según lo indicado en el diccionario
         for key in notificadores.keys():
             destinatarios = notificadores.get(key)
             notificadorNuevo = self.notificadoresExistentes[key](destinatarios)
